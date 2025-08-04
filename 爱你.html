@@ -8,14 +8,14 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #ffb6c1; /* 粉色背景 */
+            background-color: #ffb6c1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             font-family: 'Arial', sans-serif;
-            overflow: hidden; /* 防止滚动条 */
+            overflow: hidden;
         }
 
         .container {
@@ -132,56 +132,51 @@
         const gameContainer = document.getElementById('gameContainer');
         const resultScreen = document.getElementById('resultScreen');
 
-        // 为no选项添加鼠标悬停事件，使其随机移动
         noOption.addEventListener('mouseover', moveNoOption);
 
-        // 为yes选项添加点击事件
+
         yesOption.addEventListener('click', showResult);
 
-        // 移动no选项到随机位置
+
         function moveNoOption() {
-            // 获取屏幕尺寸
+
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
 
-            // 获取选项框尺寸
+
             const optionWidth = noOption.offsetWidth;
             const optionHeight = noOption.offsetHeight;
 
-            // 计算随机位置（确保选项框完全在屏幕内）
             const maxX = screenWidth - optionWidth;
             const maxY = screenHeight - optionHeight;
 
             const randomX = Math.floor(Math.random() * maxX);
             const randomY = Math.floor(Math.random() * maxY);
 
-            // 设置新位置
+
             noOption.style.position = 'absolute';
             noOption.style.left = `${randomX}px`;
             noOption.style.top = `${randomY}px`;
         }
 
-        // 显示结果屏幕
+
         function showResult() {
-            // 隐藏游戏容器
+
             gameContainer.style.display = 'none';
 
-            // 显示结果屏幕
             resultScreen.style.display = 'flex';
 
-            // 创建旋转的小丑圈
             createClownCircles();
         }
 
-        // 创建旋转的小丑圈
         function createClownCircles() {
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
             const clownEmoji = '🤡';
-            const circleCount = 5; // 圈数
-            const clownsPerCircle = 12; // 每圈的小丑数量
-            const baseRadius = 100; // 基础半径
-            const radiusIncrement = 80; // 每圈半径增量
+            const circleCount = 5; 
+            const clownsPerCircle = 12;
+            const baseRadius = 100; 
+            const radiusIncrement = 80; 
 
             for (let circle = 0; circle < circleCount; circle++) {
                 const radius = baseRadius + circle * radiusIncrement;
@@ -191,7 +186,7 @@
                 circleElement.style.height = `${radius * 2}px`;
                 circleElement.style.left = `${centerX - radius}px`;
                 circleElement.style.top = `${centerY - radius}px`;
-                // 每圈旋转方向交替
+               
                 const rotationDirection = circle % 2 === 0 ? '1' : '-1';
                 circleElement.style.animation = `rotate ${20 + circle * 2}s linear ${rotationDirection}infinite`;
 
