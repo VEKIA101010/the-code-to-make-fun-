@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱情告白游戏</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffb6c1; /* 粉色背景 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; /* 防止滚动条 */
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .question-box {
+            background-color: white;
+            border: 2px solid white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            color: black;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .option-box {
+            background-color: white;
+            border: 2px solid white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .option {
+            color: black;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .result {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 182, 193, 0.95);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .result-text {
+            color: black;
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .clown-circle {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="gameContainer">
+        <div class="question-box">
+            <div class="question">你喜欢我嘛😘😘</div>
+        </div>
+        <div class="options">
+            <div class="option-box" id="yesOption">
+                <div class="option">yes</div>
+            </div>
+            <div class="option-box" id="noOption">
+                <div class="option">no</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="result" id="resultScreen">
+        <div class="result-text">哈哈哈我不喜欢你</div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const yesOption = document.getElementById('yesOption');
+        const noOption = document.getElementById('noOption');
+        const gameContainer = document.getElementById('gameContainer');
+        const resultScreen = document.getElementById('resultScreen');
+
+        // 为no选项添加鼠标悬停事件，使其随机移动
+        noOption.addEventListener('mouseover', moveNoOption);
+
+        // 为yes选项添加点击事件
+        yesOption.addEventListener('click', showResult);
+
+        // 移动no选项到随机位置
+        function moveNoOption() {
+            // 获取屏幕尺寸
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+
+            // 获取选项框尺寸
+            const optionWidth = noOption.offsetWidth;
+            const optionHeight = noOption.offsetHeight;
+
+            // 计算随机位置（确保选项框完全在屏幕内）
+            const maxX = screenWidth - optionWidth;
+            const maxY = screenHeight - optionHeight;
+
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            // 设置新位置
+            noOption.style.position = 'absolute';
+            noOption.style.left = `${randomX}px`;
+            noOption.style.top = `${randomY}px`;
+        }
+
+        // 显示结果屏幕
+        function showResult() {
+            // 隐藏游戏容器
+            gameContainer.style.display = 'none';
+
+            // 显示结果屏幕
+            resultScreen.style.display = 'flex';
+
+            // 创建旋转的小丑圈
+            createClownCircles();
+        }
+
+        // 创建旋转的小丑圈
+        function createClownCircles() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const clownEmoji = '🤡';
+            const circleCount = 5; // 圈数
+            const clownsPerCircle = 12; // 每圈的小丑数量
+            const baseRadius = 100; // 基础半径
+            const radiusIncrement = 80; // 每圈半径增量
+
+            for (let circle = 0; circle < circleCount; circle++) {
+                const radius = baseRadius + circle * radiusIncrement;
+                const circleElement = document.createElement('div');
+                circleElement.classList.add('clown-circle');
+                circleElement.style.width = `${radius * 2}px`;
+                circleElement.style.height = `${radius * 2}px`;
+                circleElement.style.left = `${centerX - radius}px`;
+                circleElement.style.top = `${centerY - radius}px`;
+                // 每圈旋转方向交替
+                const rotationDirection = circle % 2 === 0 ? '1' : '-1';
+                circleElement.style.animation = `rotate ${20 + circle * 2}s linear ${rotationDirection}infinite`;
+
+                resultScreen.appendChild(circleElement);
+
+                for (let i = 0; i < clownsPerCircle; i++) {
+                    const angle = (i / clownsPerCircle) * 2 * Math.PI;
+                    const x = radius * Math.cos(angle);
+                    const y = radius * Math.sin(angle);
+
+                    const clownElement = document.createElement('div');
+                    clownElement.style.position = 'absolute';
+                    clownElement.style.left = `${radius + x}px`;
+                    clownElement.style.top = `${radius + y}px`;
+                    clownElement.style.transform = 'translate(-50%, -50%)';
+                    clownElement.style.fontSize = '24px';
+                    clownElement.textContent = clownEmoji;
+
+                    circleElement.appendChild(clownElement);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
